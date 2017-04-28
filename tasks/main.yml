@@ -1,0 +1,6 @@
+---
+
+- become: true
+  block:
+
+    - include: install.yml

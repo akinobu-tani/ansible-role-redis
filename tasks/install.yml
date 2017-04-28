@@ -1,0 +1,29 @@
+---
+
+- set_fact:
+    download_url: http://download.redis.io/releases/redis-{{redis_version}}.tar.gz
+    src_path: /usr/local/src/redis-{{redis_version}}
+
+- name: install dependencies
+  yum: name={{item}}
+  with_items:
+    - "{{ redis_dependencies }}"
+
+- name: download and extract redis tarball
+  unarchive:
+    src: "{{download_url}}"
+    dest: /usr/local/src
+    creates: "{{src_path}}/Makefile"
+    remote_src: yes
+
+- name: compile redis
+  command: make
+  args:
+    chdir: "{{src_path}}"
+    creates: "{{src_path}}/src/redis-server"
+
+- name: install redis
+  command: make install
+  args:
+    chdir: "{{src_path}}"
+    creates: /usr/local/bin/redis-server

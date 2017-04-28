@@ -1,0 +1,7 @@
+---
+
+- hosts: localhost
+  roles:
+    - ansible-role-redis
+  vars:
+    redis_version: 3.2.8

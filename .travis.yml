@@ -1,0 +1,24 @@
+---
+
+language: ruby
+
+services:
+  - docker
+
+sudo: required
+
+bundler_args: --without development
+
+env:
+  - INSTANCE=default-centos-7
+  - INSTANCE=default-amazonlinux-201609
+
+script:
+  - bundle exec kitchen test $INSTANCE
+
+after_script:
+  - cat .kitchen/logs/kitchen.log
+
+notifications:
+  slack:
+    secure: lJHJaU6PIJh44qbFRl87ffp4+2d6hNK+r5xtq4ZTBsV/LXPmbsd18QcbWMEXIiUx8ztzpZ4sHVPd4HCiODVs7MltnQx+WETWCIPuGAgaAErZyz4xLWub+iRlKjMbleRa88MBoLrr4jaWyBRG/ew0HK3L4fFvKqPVNwAm0hfEKXOXel8vievI2T8T2HMPOZ1y60aa3tGCeSWfmdVMLEe3HDBCzQXdVuU5HQifuzfzQJYNbpG5itsLA6PvHkxrc0iFzt+OGZpc3m5/Rk6ENWHwrnC0cJ/CM9V/dYTebcTW2CqccwZeGwecS1phG0CuFhvQ2P04JtTZGv2kGKVyK7pqguQ9B1mVgRypy2fMnmipk8Q90yH9An5m1sKrn7mb/1ZobSKXduUNvBfcLlglxjvETLujHdx8tyWddEceOwqYv7RXrqRcjsv3BXYZKZIAVuqzpBq/kP5fLBpF/mLMq6bQ/zoIQMTVdHw0rGnYjeV9cN3zUqp7bgKeKQTS++8iBLtLebSXAEs2wW+AYqddEpeendJvSZlUEUIgf4fSfFI8G3YrW8HQuFS4v6m50ywjpladgazSMzjK4brQ//Ho4dtCq833Es7BMggjewHGDKwqj+hYmrzZwVsn7/AAQPCmsNYA94juD6tFJG9LiEyFwO42PDWyJFnj375jKqiCc/EThBY=

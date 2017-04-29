@@ -1,0 +1,45 @@
+---
+
+  - set_fact:
+      service: init
+      config_dir: /etc/redis
+      log_dir: /var/log/redis
+
+  - set_fact:
+      service: systemd
+    when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "7"
+
+  - name: create redis user
+    user:
+      name: redis
+
+  - name: create config directory
+    file:
+      path: "{{config_dir}}"
+      state: directory
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: create log directory
+    file:
+      path: "{{log_dir}}"
+      state: directory
+      owner: redis
+      group: redis
+      mode: 0755
+
+  - name: log rotate
+    template:
+      src: logrotate.conf.j2
+      dest: /etc/logrotate.d/redis
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: configure service
+    include: service.yml
+    vars:
+      port: "{{item.port | default(item)}}"
+      save_on_disc: "{{item.save_on_disc | default(false)}}"
+    with_items: "{{ redis_nodes }}"

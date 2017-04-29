@@ -1,0 +1,12 @@
+[Unit]
+Description=Redis port: {{port}}
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/redis-server {{configfile}} --daemonize no
+ExecStop=/usr/local/bin/redis-shutdown
+User=redis
+Group=redis
+
+[Install]
+WantedBy=multi-user.target

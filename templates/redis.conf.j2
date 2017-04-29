@@ -1,0 +1,133 @@
+################################## INCLUDES ###################################
+
+# include /path/to/local.conf
+# include /path/to/other.conf
+
+################################## NETWORK #####################################
+
+bind 0.0.0.0
+#protected-mode yes
+
+port {{port}}
+tcp-backlog 511
+
+timeout 1800
+tcp-keepalive 60
+
+################################# GENERAL #####################################
+
+daemonize yes
+#supervised no
+
+pidfile {{pidfile}}
+
+loglevel notice
+logfile {{logfile}}
+
+databases 16
+
+################################ SNAPSHOTTING  ################################
+
+{% if save_on_disc %}
+save 900 1
+save 300 10
+save 60 10000
+{% else %}
+save ""
+{% endif %}
+stop-writes-on-bgsave-error yes
+rdbcompression yes
+rdbchecksum yes
+dbfilename dump.rdb
+dir {{datadir}}
+
+################################# REPLICATION #################################
+
+# slaveof <masterip> <masterport>
+# masterauth <master-password>
+slave-serve-stale-data yes
+slave-read-only yes
+repl-diskless-sync no
+repl-diskless-sync-delay 5
+repl-disable-tcp-nodelay no
+slave-priority 100
+
+################################## SECURITY ###################################
+
+# requirepass foobared
+
+################################### CLIENTS ####################################
+
+maxclients 10000
+
+############################## MEMORY MANAGEMENT ################################
+
+# maxmemory <bytes>
+maxmemory-policy volatile-lru
+maxmemory-samples 5
+
+############################# LAZY FREEING ####################################
+
+#lazyfree-lazy-eviction no
+#lazyfree-lazy-expire no
+#lazyfree-lazy-server-del no
+#slave-lazy-flush no
+
+############################## APPEND ONLY MODE ###############################
+
+appendonly no
+appendfilename "appendonly.aof"
+appendfsync everysec
+no-appendfsync-on-rewrite no
+auto-aof-rewrite-percentage 100
+auto-aof-rewrite-min-size 64mb
+aof-load-truncated yes
+
+################################ LUA SCRIPTING  ###############################
+
+lua-time-limit 5000
+
+################################ REDIS CLUSTER  ###############################
+
+# cluster-enabled yes
+# cluster-config-file nodes-6379.conf
+# cluster-node-timeout 15000
+# cluster-slave-validity-factor 10
+# cluster-migration-barrier 1
+# cluster-require-full-coverage yes
+
+########################## CLUSTER DOCKER/NAT support  ########################
+
+# cluster-announce-ip 10.1.1.5
+# cluster-announce-port 6379
+# cluster-announce-bus-port 6380
+
+################################## SLOW LOG ###################################
+
+slowlog-log-slower-than 10000
+slowlog-max-len 128
+
+################################ LATENCY MONITOR ##############################
+
+latency-monitor-threshold 0
+
+############################# EVENT NOTIFICATION ##############################
+
+notify-keyspace-events ""
+
+############################### ADVANCED CONFIG ###############################
+
+hash-max-ziplist-entries 512
+hash-max-ziplist-value 64
+#list-max-ziplist-size -2
+#list-compress-depth 0
+set-max-intset-entries 512
+zset-max-ziplist-entries 128
+zset-max-ziplist-value 64
+hll-sparse-max-bytes 3000
+activerehashing yes
+client-output-buffer-limit normal 0 0 0
+client-output-buffer-limit slave 256mb 64mb 60
+client-output-buffer-limit pubsub 32mb 8mb 60
+hz 10
+aof-rewrite-incremental-fsync yes

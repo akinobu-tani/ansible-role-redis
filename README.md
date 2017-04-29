@@ -14,6 +14,10 @@ Role Variables
 
 ```
 redis_version: 3.2.8
+redis_nodes:
+  - port: 6379
+    save_on_disc: yes
+redis_data_dir: /var/lib/redis
 ```
 
 Dependencies
@@ -28,6 +32,8 @@ Example Playbook
 - hosts: servers
   vars:
     redis_version: 3.2.8
+    redis_nodes:
+      - 6379
   roles:
      - redis
 ```

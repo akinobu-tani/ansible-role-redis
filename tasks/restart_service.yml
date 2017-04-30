@@ -1,0 +1,15 @@
+---
+
+- become: true
+  block:
+
+    - service:
+        name: redis-{{item.port | default(item)}}
+        state: restarted
+      with_items: "{{ redis_nodes }}"
+      when: redis_nodes|length > 1
+
+    - service:
+        name: redis
+        state: restarted
+      when: redis_nodes|length == 1

@@ -6,6 +6,15 @@
     configfile: "{{config_dir}}/{{port}}.conf"
     datadir: "{{redis_data_dir}}/{{port}}"
     service_name: redis-{{port}}
+  when: redis_nodes|length > 0
+
+- set_fact:
+    pidfile: /var/run/redis.pid
+    logfile: "{{log_dir}}/redis.log"
+    configfile: "{{config_dir}}/redis.conf"
+    datadir: "{{redis_data_dir}}"
+    service_name: redis
+  when: redis_nodes|length == 1
 
 - name: create data directory
   file:

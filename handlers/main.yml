@@ -1,8 +1,4 @@
 ---
 
 - name: restart redis
-  service:
-    name: redis-{{item.port | default(item)}}
-    state: restarted
-  with_items: "{{ redis_nodes }}"
-  become: true
+  include: restart_service.yml

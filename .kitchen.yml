@@ -24,8 +24,6 @@ platforms:
 
 verifier:
   name: serverspec
-  patterns:
-    - roles/ansible-role-redis/test/integration/default/serverspec/*_spec.rb
   env_vars:
     TARGET_HOST: localhost
     LOGIN_USER: kitchen
@@ -33,3 +31,10 @@ verifier:
 
 suites:
   - name: default
+    verifier:
+      patterns:
+        - roles/ansible-role-redis/test/integration/default/serverspec/*_spec.rb
+  - name: multiple_services
+    verifier:
+      patterns:
+        - roles/ansible-role-redis/test/integration/multiple_services/serverspec/*_spec.rb

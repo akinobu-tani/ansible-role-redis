@@ -32,8 +32,6 @@ Example Playbook
 - hosts: servers
   vars:
     redis_version: 3.2.8
-    redis_nodes:
-      - 6379
   roles:
      - redis
 ```
